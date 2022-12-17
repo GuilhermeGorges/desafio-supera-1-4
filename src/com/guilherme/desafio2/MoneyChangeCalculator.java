@@ -1,6 +1,11 @@
 package com.guilherme.desafio2;
 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class MoneyChangeCalculator {
 
@@ -11,17 +16,17 @@ public class MoneyChangeCalculator {
             20,
             10,
             5,
-            2,
-            1));
+            2));
 
     private static final List<Integer> COINS_LIST = new ArrayList<>(Arrays.asList(
+            100,
             50,
             25,
             10,
             5,
             1));
 
-    public static  Map<String,Integer> banknoteCount2(double value) {
+    public static Map<String,Integer> banknoteCount2(double value) {
         Map<String, Integer> hashNote = new HashMap<>();
 
        for (Integer note : NOTES_LIST) {
@@ -36,7 +41,11 @@ public class MoneyChangeCalculator {
 
         for (Integer coin : COINS_LIST) {
             if (value > coin) {
-                hashNote.put(("0." + coin.toString()), (int) (value / coin));
+                if (coin == 100) {
+                    hashNote.put(("1.00"), (int) (value / coin));
+                } else {
+                    hashNote.put(("0." + coin.toString()), (int) (value / coin));
+                }
                 value = (value % coin);
             } else {
                 hashNote.put(("0." + coin.toString()), 0);
@@ -53,16 +62,21 @@ public class MoneyChangeCalculator {
                         wallet.get((note.toString() + ".00")),
                         (note.toString() + ".00"));
             } else {
-                System.out.println("MOEDAS:");
                 System.out.printf("%-5d moedas(s)     de       R$ %9s\n",
                         wallet.get((note.toString() + ".00")),
                         (note.toString() + ".00"));
             }
         });
+        System.out.println("MOEDAS:");
         COINS_LIST.forEach(coin -> {
-            System.out.printf("%d     moedas(s)     de       R$ %9s\n",
-                    wallet.get(("0." + coin.toString())),
-                    coin < 10 ? ("0.0" + coin.toString()) : ("0." + coin.toString()));
+            if (coin == 100) {
+                System.out.printf("%-5d moedas(s)     de       R$ %9s\n",
+                        wallet.get("1.00"), ("1.00"));
+            } else {
+                System.out.printf("%d     moedas(s)     de       R$ %9s\n",
+                        wallet.get(("0." + coin.toString())),
+                        coin < 10 ? ("0.0" + coin.toString()) : ("0." + coin.toString()));
+            }
         });
 
     }
